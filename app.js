@@ -7,6 +7,10 @@ const app = express();
 // on importe la méthode path de Node qui donne accès au chemin de notre système de fichier
 const path = require('path'); 
 
+//importation des routes 
+const userRoute = require('./routes/user');
+const sauceRoute = require('./routes/sauce');
+
 mongoose.connect('mongodb+srv://admin:LymnxGtLm5hbaaoV@piiquante.2nbrr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
@@ -20,6 +24,14 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
 })
+
+const location = __dirname
+const fullpath = path.join(__dirname, 'images')
+app.use('/images', express.static(fullpath))
+
+
+app.use('/api/sauces', sauceRoute)
+app.use('/api/auth', userRoute)
 
 
 module.exports = app;
