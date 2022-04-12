@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
 
 const sauceSchema = mongoose.Schema({
-    userId: {type: String, required: true}, // l'identifiant MongoDB unique de l'utilisateur qui a créé la sauce
-    name: {type: String, required: true}, //Nom de la sauce 
-    manufacturer: {type: String, required: true}, //Fabricant de la sauce 
-    description: {type: String, required: true}, // Description de la sauce
-    mainPepper: {type: String, required: true}, // Le principal ingrédient épicée de la sauce
-    imageUrl: {type: String, required: true}, // l'URL de l'image de la sauce téléchargée par l'utilisateur
-    heat: {type: Number, required: true}, // nombre entre 1 et 10 décrivant la sauce
-    likes: {type: Number, required: true}, // nombre d'utilisateurs qui aiment (= likent) la sauce
-    dislikes: {type: Number, required: true}, //  nombre d'utilisateurs qui n'aiment pas (= dislike) la sauce
-    usersLiked: {type: [], required: true}, //["String <userId>"]
-    usersDisliked: {type: [], required: true}, //["String <userId>"]
-})
+  userId: { type: String, required: true },
+  name: { type: String, required: true },
+  manufacturer: { type: String, required: true },
+  description: { type: String, required: true },
+  mainPepper: { type: String, required: true },
+  imageUrl: { type: String, required: true },
+  heat: { type: Number, required: true },
+  likes: { type: Number, required: true },
+  dislikes: { type: Number, required: true },
+  usersLiked: { type: [], required: true },
+  usersDisliked: { type: [], required: true },
+});
 
-module.exports = mongoose.model('Sauce', sauceSchema)
+module.exports = mongoose.model('Sauce', sauceSchema);
