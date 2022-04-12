@@ -16,6 +16,14 @@ exports.createSauce = async (req, res) => {
     ) {
         return res.status(400).json({message : "please provides all fields"})
     }
+
+    const sauceFieldsValidator = [sauceObject.name, sauceObject.manufacturer, sauceObject.description, sauceObject.mainPepper]
+    for (let i = 0; i < sauceFieldsValidator.length; i++) {
+        if(!/^[\wàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ\d '-]+$/.test(sauceFieldsValidator[i])) {
+            return res.status(400).json({message: "champs invalide"})
+        } 
+    }
+
     const sauce = new Sauce({
         ...sauceObject,
         likes : 0,
@@ -52,7 +60,7 @@ exports.modifySauce = async (req, res) => {
         return res.status(404).json({message: "sauce inexistante"})
     }
     if (sauceModifier.userId !== req.auth.userId) {
-        return res.status(401).json({message: "Unauthorization request"})  
+        return res.status(403).json({message: "Unauthorized request"})  
     }
     const sauceObject = req.file ? {
         ...JSON.parse(req.body.sauce),
@@ -67,6 +75,13 @@ exports.modifySauce = async (req, res) => {
     ) {
         return res.status(400).json({message : "please provides all fields"})
     }
+    const sauceFieldsValidator = [sauceObject.name, sauceObject.manufacturer, sauceObject.description, sauceObject.mainPepper]
+    for (let i = 0; i < sauceFieldsValidator.length; i++) {
+        if(!/^[\wàèìòùÀÈÌÒÙáéíóúýÁÉÍÓÚÝâêîôûÂÊÎÔÛãñõÃÑÕäëïöüÿÄËÏÖÜŸçÇßØøÅåÆæœ\d '-]+$/.test(sauceFieldsValidator[i])) {
+            return res.status(400).json({message: "champs invalide"})
+        } 
+    } 
+
     await  Sauce.updateOne({_id: req.params.id}, {...sauceObject, _id: req.params.id} )
         .catch(error => res.status(400).json({error}));
     return res.status(200).json({message: 'Objet modifié'})   
@@ -76,7 +91,7 @@ exports.deleteSauce = async (req, res) => {
     const sauce = await Sauce.findOne({ _id: req.params.id }) 
         .catch(error => res.status(500).json({ error }));
 
-    if (sauce.userId !== req.auth.userId) return res.status(401).json({message: "unauthorized request "});
+    if (sauce.userId !== req.auth.userId) return res.status(403).json({message: "unauthorized request "});
 
     const filename = sauce.imageUrl.split('/images/')[1];
     await fs.promises.unlink(`images/${filename}`) 
